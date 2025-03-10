@@ -3,8 +3,19 @@ import { FaBars } from "react-icons/fa";
 import { IoCartOutline } from "react-icons/io5";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import { FaRegUserCircle } from "react-icons/fa";
+import Navigation from "./Navigation/Navigation";
+import { useState, useEffect } from "react";
 
 const Header = () => {
+
+    const [isNavigationOpen, setIsNavigationOpen] = useState(false)
+
+    useEffect(() => {
+
+        const handleResize = () => window.innerWidth >= 1200 && setIsNavigationOpen(true)
+
+        window.addEventListener("resize", handleResize);
+    }, [])
 
     return (
         <header className={styles.header}>
@@ -18,15 +29,16 @@ const Header = () => {
                                 e.stopPropagation()
                                 
                             }} className={styles.bar_container}>
-                            <FaBars className={styles.bars}/>
+                            <FaBars onClick={() => setIsNavigationOpen(!isNavigationOpen)} className={styles.bars}/>
                         </div>
                         <h4 className={styles.name}>SHOP.CO</h4>
                     </div>
                     <div className={styles.info}>
-                       <HiMiniMagnifyingGlass className={styles.magnifying_glass}/>
+                        {isNavigationOpen && <Navigation />}
+                       <HiMiniMagnifyingGlass className={`${styles.magnifying_glass} ${styles.icon}`}/>
                        <input type="text" placeholder="Search for product..." className={styles.search_products_input} />
-                       <IoCartOutline />
-                       <FaRegUserCircle />
+                       <IoCartOutline className={styles.icon}/>
+                       <FaRegUserCircle className={styles.icon}/>
                     </div>
                 </div>
             </section>

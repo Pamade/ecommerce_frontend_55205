@@ -6,11 +6,11 @@ const navigationItems = [{label:"Shop", to:"/shop"}, {label:"On Sale", to:"/sale
 ]
 
 const Navigation = () => {
-
+    
     return (
         <nav className={styles.navigation}>
             <ul className={styles.wrapper}>
-                {navigationItems.map((item) => <li><Link to={item.to}>{item.label}</Link></li>)}
+                {navigationItems.map((item) => <li><Link className={styles.link} to={item.to}>{item.label}</Link></li>)}
             </ul>
         </nav>
     )

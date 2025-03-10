@@ -1,0 +1,39 @@
+@use "../../styles/variables" as variables;
+
+.navigation{
+    // display: none;
+    position: absolute;
+    background-color:variables.$second;
+    width: 100%;
+    bottom: -2rem;
+    border-bottom: 1px solid black;
+    left: 0;
+}
+
+.wrapper{
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0;
+}
+
+.link{
+    color: variables.$main;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+@media (min-width:1200px){
+    .navigation{
+        position: static;
+        border-bottom: none;
+        display: block;
+    }
+}
+
+@media (min-width:1600px){
+    .navigation{
+        margin: auto 1.5rem;
+    }
+}

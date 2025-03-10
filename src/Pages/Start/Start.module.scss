@@ -1,0 +1,147 @@
+@use "../../styles/variables" as variables;
+
+.main_background{
+    background-color: variables.$third;
+    padding-top: 3rem;
+}
+
+.wrapper{
+    width: 95%;
+    margin: 0 auto;
+}
+
+.heading{
+    font-size: 2.8rem;
+    font-weight: 900;
+}
+
+.description{
+    font-size: 1.2rem;
+    margin: 2rem auto;
+}
+
+.button{
+    background-color: variables.$main;
+    border-radius: 62px;
+    color: variables.$second;
+    width: 100%;
+    font-size: 1.5rem;
+    padding: 1.5rem 0;
+}
+
+.about{
+    margin: 2rem auto;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap; 
+    &_title{
+        font-size: 2rem;
+    }
+    &_label{
+        font-size: 1.1rem;
+    }
+}
+
+.single_about{
+    width: 45%;
+    margin: 1rem auto;
+    text-align: center;
+}
+
+.people{
+    margin: 0 auto;
+}
+
+.guys{
+    text-align: center;
+    width: 100%;
+}
+
+.partners{
+    padding: 2rem 1rem;
+    display: flex;
+    background-color: variables.$main;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 1rem;
+    &_logo{
+        margin: 1rem 0;
+        max-width: 100px;
+        max-height: 100px;
+    }
+}
+
+@media (min-width:760px) {
+    .guys{
+        width: 50%;
+        display: flex;
+        justify-self: center;
+    }
+
+    .partners{
+        &_logo{
+            margin: 1rem 0;
+            width: 20%;
+        }
+    }
+    
+}
+
+@media (min-width:1200px) {
+    .main_background{
+        padding: 0 10%;
+        display: flex;
+        align-items: center;
+    }
+
+    .guys{
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .wrapper{
+        margin: 0 auto;
+        width: 45%;
+    }
+
+    .heading{
+        font-size: 3rem;
+    }
+    .about{
+        justify-content: space-between;
+    }
+
+    .single_about{
+        width: 30%;
+    }
+
+    .button{
+        width: 40%;
+    }
+
+    .people{
+        width: 45%;
+    }
+}
+
+@media (min-width:1600px) {
+
+
+    .heading{
+        font-size: 4rem;
+    }
+
+    .about{
+        &_title{
+            font-size: 4rem;
+        }
+    }
+}
+
+@media (min-width:1800px) {
+    .heading{
+        font-size: 4.8rem;
+    }
+}
