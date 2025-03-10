@@ -1,0 +1,80 @@
+@use "../styles/variables" as variables;
+
+.header{
+    position: fixed;
+    width: 100%;
+}
+
+.discount_box{
+    background-color:variables.$main;
+    color: variables.$second;
+    text-align: center;
+    padding: 0.5rem 0;
+    letter-spacing: 1px;
+}
+
+.heading{
+    font-weight: normal;
+}
+
+.sign{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.main_header{
+    color: variables.$main;
+    background-color: variables.$second;
+    padding: 2rem 1rem;
+}
+
+.wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.about{
+    display: flex;
+    gap: 1rem;
+    font-size: 1.5rem;
+    justify-content: space-between;
+
+}
+
+
+.info{
+    display: flex;
+    gap: 1rem;
+    font-size: 1.5rem;
+    align-items: center;
+}
+
+.search_products_input{
+    display: none;
+}
+
+@media(min-width:760px){
+    .magnifying_glass, .bars{
+        display: none;
+    }
+
+    .search_products_input{
+        display: block;
+        width: 30vw;
+        border-radius: 62px;
+        background-color: variables.$third;
+        border: 1px solid transparent;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        color: variables.$fourth;
+        outline: none;
+        &:focus{
+            border: 1px solid variables.$fourth;
+        }
+    }
+}
+
+.discount_box{
+    font-size: 1.2rem;
+}

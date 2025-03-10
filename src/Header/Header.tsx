@@ -1,0 +1,38 @@
+import styles from "./Header.module.scss"
+import { FaBars } from "react-icons/fa";
+import { IoCartOutline } from "react-icons/io5";
+import { HiMiniMagnifyingGlass } from "react-icons/hi2";
+import { FaRegUserCircle } from "react-icons/fa";
+
+const Header = () => {
+
+    return (
+        <header className={styles.header}>
+            <div className={styles.discount_box}>
+                <h5 className={styles.heading}>Sign up and get 20% off to your first order. <span className={styles.sign}>Sign up now</span></h5>
+            </div>
+            <section className={styles.main_header}>
+                <div className={styles.wrapper}>
+                    <div className={styles.about}>
+                        <div onClick={(e) => {
+                                e.stopPropagation()
+                                
+                            }} className={styles.bar_container}>
+                            <FaBars className={styles.bars}/>
+                        </div>
+                        <h4 className={styles.name}>SHOP.CO</h4>
+                    </div>
+                    <div className={styles.info}>
+                       <HiMiniMagnifyingGlass className={styles.magnifying_glass}/>
+                       <input type="text" placeholder="Search for product..." className={styles.search_products_input} />
+                       <IoCartOutline />
+                       <FaRegUserCircle />
+                    </div>
+                </div>
+            </section>
+        </header>
+    )
+
+}
+
+export default Header;
