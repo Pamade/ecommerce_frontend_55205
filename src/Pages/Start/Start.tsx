@@ -5,6 +5,7 @@ import logo2 from "../../assets/partners/logo2.png"
 import logo3 from "../../assets/partners/logo3.png"
 import logo4 from "../../assets/partners/logo4.png"
 import logo5 from "../../assets/partners/logo5.png"
+import DisplayClothes from "./DisplayClothes/DisplayClothes"
 
 const Start = () => {
     const partners = [logo1, logo2, logo3, logo4, logo5]
@@ -35,6 +36,7 @@ const Start = () => {
         <section className={styles.partners}>
                 {partners.map((partner) => <img className={styles.partners_logo} src={partner} alt="partner"/>)}
         </section>
+        <DisplayClothes heading={"NEW ARRIVALS"}/>
     </>
         
     )
