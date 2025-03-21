@@ -1,0 +1,25 @@
+@use "../styles/variables" as variables;
+
+.footer{
+    padding: 1rem;
+    background-color: variables.$third;
+    color: variables.$main;
+    box-sizing: border-box;
+}
+
+.container{
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    // font-weight: 500;
+    // background-color:red;
+}
+
+@media(min-width:1200px) {
+   .container{
+        width: 80%;
+
+    // background-color:red;
+   } 
+}

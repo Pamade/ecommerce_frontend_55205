@@ -1,0 +1,145 @@
+@use "../../../styles/variables" as variables;
+
+a {
+    color: variables.$main;
+}
+
+.filters{
+    position: fixed;
+    height: 85%;
+    width: 100vw;
+    z-index: 1;
+    background-color:variables.$third;
+    border-radius: 20px;
+}
+
+.filters_close{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid variables.$main;
+}
+
+.content{
+    padding: 1.5rem;
+}
+
+.wrapper_single{
+    // margin: 1.5rem auto;
+    padding: 1rem 0;
+    border-bottom: 1px solid variables.$main;
+}
+
+.list_styles{
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    gap: 0.5rem;
+}
+
+.color_option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    padding: 0;
+  
+    &:hover {
+      transform: scale(1.1);
+    }
+  
+    &.selected {
+      border-color: #333;
+    }
+  }
+
+  .palette{
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+
+  .items_wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .box_item{
+    cursor: pointer;
+    padding: 0.8rem 1.5rem;
+    margin: 1rem 0;
+    display: flex;
+    display: inline-block;
+    background-color: variables.$second;
+    border-radius: 22px;
+    &_selected{
+      color: variables.$second;
+      background-color: variables.$main;
+    }
+  }
+
+  .checkmark {
+    color: white;
+    font-size: 20px;
+    text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+    
+    // Ensure white checkmark is visible on light colors
+    .color_option[style*="background-color: #FFFFFF"] &,
+    .color_option[style*="background-color: #FFEB3B"] & {
+      color: #333;
+      text-shadow: none;
+    }
+  }
+  
+  // Special border for white to make it visible
+  .color_option[style*="background-color: #FFFFFF"] {
+    border: 1px solid #e0e0e0;
+    
+    &.selected {
+      border: 2px solid #333;
+    }
+  }
+
+  .btn {
+    margin: 1rem 0;
+    padding: 1rem 0;
+    width: 100%;
+    border-radius: 62px;
+    background-color: variables.$main;
+    color: variables.$second;
+    cursor: pointer;
+    transition: .3s;
+    &:hover{
+      background-color: variables.$second;
+      color: variables.$main;
+    }
+  }
+
+  .text_li{
+    background-color:white;
+    display: block;
+    padding: 0.5rem;
+  }
+
+  .name{
+    font-weight: bold;
+  }
+
+  @media (min-width:1200px) {
+    .filters{
+      margin: 0 auto;
+      position: sticky;
+      width: 50%;
+      &_x{
+        display: none;
+      }
+    }
+  }

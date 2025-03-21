@@ -6,13 +6,24 @@ import logo3 from "../../assets/partners/logo3.png"
 import logo4 from "../../assets/partners/logo4.png"
 import logo5 from "../../assets/partners/logo5.png"
 import DisplayClothes from "./DisplayClothes/DisplayClothes"
+import BrowseByDressStyle from "./BrowseByDressStyle/BrowseByDressStyle"
+import axios from "axios"
+import { token, API_SERVER } from "../../main"
+import OutHappyCustomers from "./OurHappyCustomers/OurHappyCustomers"
 
 const Start = () => {
     const partners = [logo1, logo2, logo3, logo4, logo5]
     const about = [{title:"200+", label:"International Brands"}, {title:"2,000+", label:"High Quality Products"}, {title:"30,000+", label:"Happy customers"}]
-
+                const fetch = async () => {
+                    const r = await axios.post(`${API_SERVER}/reviews/add`, {productId:64, email:"insune15@gmail.com", reviewText:"XD", rating:5}, {
+                        headers:{"Authorization": "Bearer " + token}
+                    })
+                    console.log(r)
+                }
+                // fetch()
     return (
     <>
+        <button onClick={() => fetch()}>ADD review</button>
         <section className={styles.main_background}>
             <div className={styles.wrapper}>
                 <div className={styles.info}>
@@ -36,7 +47,11 @@ const Start = () => {
         <section className={styles.partners}>
                 {partners.map((partner) => <img className={styles.partners_logo} src={partner} alt="partner"/>)}
         </section>
-        <DisplayClothes heading={"NEW ARRIVALS"}/>
+        <div className={styles.info}>
+            <DisplayClothes heading={"NEW ARRIVALS"}/>
+            <BrowseByDressStyle />
+            <OutHappyCustomers />
+        </div>
     </>
         
     )

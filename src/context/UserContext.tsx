@@ -1,16 +1,9 @@
 import React, { createContext, useContext, useReducer } from "react";
 import axios from "axios";
 import { API_SERVER } from "../main";
+import {User} from "../types/types";
 
 
-interface User {
-    email: string; // this is email
-    firstName:string;
-    lastName:string;
-    phoneNumber:number,
-    city:string,
-    address:string
-}
 
 interface State {
     user: User | null;

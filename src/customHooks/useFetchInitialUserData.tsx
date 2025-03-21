@@ -1,11 +1,17 @@
 import { useUserContext } from "../context/UserContext";
 import { useEffect } from "react";
 import { token } from "../main";
+import axios from "axios"
+import { API_SERVER } from "../main";
+import { ProductInterface } from "../types/types";
+
+// const Product:ProductInterface {}
 
 const useFetchInitialUserData = () => {
         const {fetchUserData, state} = useUserContext();
-    
+
         useEffect(() => {
+
             if (token) {
                 fetchUserData(token);
             } else {
@@ -13,7 +19,7 @@ const useFetchInitialUserData = () => {
             }
             console.log(state)
         }, []);
-        
+
         return {state}
 }
 export default useFetchInitialUserData;

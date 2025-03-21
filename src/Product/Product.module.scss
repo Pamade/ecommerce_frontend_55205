@@ -1,0 +1,50 @@
+@use "../styles/variables" as variables;
+
+.product{
+    width: 45%;
+    // padding: 1rem;
+    box-sizing: border-box;
+    margin: 2rem auto;
+}
+
+.background_image{
+    background-color:variables.$third;
+    padding: 1rem;
+    box-sizing: border-box;
+    border-radius: 20px;
+    margin: 1rem 0;
+}
+
+.img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.info{
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.ratings{
+    display: flex;
+    gap: 0.5rem;
+    font-weight: normal;
+}
+
+@media(min-width:760px) {
+    .product {
+        width: 24%;
+        
+    }
+}
+
+@media (min-width:1200px) {
+    .img{
+        width: 200px;
+        height: 200px;
+    }
+}

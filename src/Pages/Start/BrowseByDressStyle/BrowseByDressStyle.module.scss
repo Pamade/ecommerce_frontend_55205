@@ -1,0 +1,64 @@
+@use "../../../styles/variables" as variables;
+
+.wrapper{
+    margin: 4rem auto;
+    padding: 1rem;
+    box-sizing: border-box;
+    background-color: variables.$third;
+    border-radius: 20px;
+}
+
+.background_person{
+    width: 100%;
+    height: 10rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+
+.persons_wrapper{
+    display: flex;
+    flex-direction: column;
+    margin: 2rem;
+    gap: 2rem;
+}
+
+.person_single{
+    width: 100%;
+}
+
+.type{
+    color: variables.$main;
+    font-size: 1.8rem;
+    text-align: left;
+    padding:1rem;
+}
+
+@media (min-width:760px) {
+    .persons_wrapper{
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .person_single{
+        width: 45%;
+    }
+}
+
+@media (min-width:1200px) {
+
+    .wrapper{
+        padding: 5rem;
+    }
+
+    .background_person {
+        height: 20rem;
+    }
+    .person_single:nth-child(1), .person_single:nth-child(4) {
+        width: 30%;
+    }
+    .person_single:nth-child(2), .person_single:nth-child(3) {
+        width: 65%;
+    }
+}

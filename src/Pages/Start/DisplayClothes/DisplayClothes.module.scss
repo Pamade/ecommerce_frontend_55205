@@ -1,11 +1,22 @@
-.wrapper{
-    margin: 4rem auto;
-    width: 95%;
-    text-align: center;
+@use "../../../styles/variables" as variables;
+
+.products{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    // flex-basis: 100%;
 }
 
-.heading{
-    font-size: 2rem;
-    font-weight: 900;
-    letter-spacing: 1.5px;
+.btn{
+    padding: 1rem 3.5rem;
+    border: 1px solid variables.$third;
+    cursor: pointer;
+    background-color: variables.$second;
+    border-radius: 62px;
+    transition: 0.3s;
+    &:hover{
+        background-color: variables.$third;
+    }
 }
+

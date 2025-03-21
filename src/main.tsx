@@ -7,7 +7,7 @@ import { UserProvider } from './context/UserContext.tsx';
 import Login from './Pages/Login/Login.tsx';
 import Register from './Pages/Register/Register.tsx';
 import UserLoggedRoute from './ProtectionRoutes/UserLoggedRoute.tsx';
-
+import Shop from './Pages/Shop/Shop.tsx';
 export const API_SERVER = import.meta.env.VITE_SERVER;
 export const token = localStorage.getItem("access_token");
 
@@ -20,6 +20,10 @@ const router = createBrowserRouter([
         path:"/",
         element:<Start />,
       }, 
+      {
+        path:"/shop",
+        element:<Shop />
+      }
     ]
      // i want to have header and side nav on every page
   },

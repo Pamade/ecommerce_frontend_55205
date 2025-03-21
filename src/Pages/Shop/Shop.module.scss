@@ -1,0 +1,57 @@
+@use "../../styles/variables" as variables;
+
+.shop{
+    margin: 2rem 0;
+}
+
+.content{
+    width: 95%;
+    margin: 0 auto;
+}
+
+.list{
+    display: flex;
+    gap: 0.5rem;
+}
+
+.list_item{
+    &:last-of-type{
+        font-weight: bold;
+    }
+}
+
+.type_filters{
+    margin: 1rem auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.link{
+    color: variables.$main;
+}
+
+.browse_products, .filters_turn{
+    font-size: 2rem;
+}
+
+.products{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    box-sizing: border-box;
+}
+
+@media (min-width:1200px) {
+    .shop{
+        display: flex;
+        width: 90%;
+        gap: 5rem;
+        margin: 0 auto;
+        margin-bottom: 5rem;
+    }
+
+    .filters_turn{
+        display: none;
+    }
+}
