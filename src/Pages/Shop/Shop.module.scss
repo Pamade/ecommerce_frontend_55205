@@ -6,7 +6,7 @@
 
 .content{
     width: 95%;
-    margin: 0 auto;
+    margin: 2rem auto;
 }
 
 .list{
@@ -40,6 +40,10 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     box-sizing: border-box;
+}
+
+.not_found{
+    font-size: 2rem;
 }
 
 @media (min-width:1200px) {

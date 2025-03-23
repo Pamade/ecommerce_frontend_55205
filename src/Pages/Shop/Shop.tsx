@@ -89,12 +89,12 @@ const Shop = () => {
                     <IoFilter onClick={() => setIsFilterOn(true)} className={styles.filters_turn}></IoFilter>
                 </div>
                 <div className={styles.products}>
-                    {filteredProducts.map((product) => 
+                    {filteredProducts.length !== 0 ?filteredProducts.map((product) => 
                             <>
                                 <ShopProduct {...product}/>
                             </>
                     )
-                    }
+                    : <h5 className={styles.not_found}>No Products</h5>}
                 </div>
                 {totalItems > 0 && <PaginationButtons currentPage={currentPage} setCurrentPage={setCurrentPage} totalItems={totalItems} itemsPerPage={maxProductsPerPage}/>}
             </div>
