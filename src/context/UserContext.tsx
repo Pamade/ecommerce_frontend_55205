@@ -1,14 +1,12 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 import axios from "axios";
-import { API_SERVER } from "../main";
+import { API_SERVER, token } from "../main";
 import {User} from "../types/types";
+import { ContextState } from "../types/types";
 
 
-
-interface State {
+interface State extends ContextState{
     user: User | null;
-    loading: boolean;
-    error: null | string;
 }
 
 const initialState: State = {
@@ -60,6 +58,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         dispatch({type:"LOGOUT"})
     }
 
+
+
     const fetchUserData = async (token: string) => {
         dispatch({ type: "START_FETCH_USER_DATA" });
 
@@ -75,6 +75,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 throw new Error("Failed to fetch");
             }
             const data: User = res.data
+            
             dispatch({ type: "FETCH_USER_DATA_SUCCESS", payload: data });
         } catch (error) {
             if (error instanceof Error) {
@@ -82,6 +83,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
         }
     };
+
+    useEffect(() => {
+        const w = async() => {
+            await fetchUserData(token!)
+        }
+        w()
+    }, [])
 
     return (
         <UserContext.Provider value={{ state, fetchUserData, logout }}>

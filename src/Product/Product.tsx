@@ -7,7 +7,6 @@ const Product = (product:ProductInterface) => {
 
     const [rating, setRating] = useState(0)
 
-
     return (
         <div className={styles.product}>
             <div className={styles.background_image}>

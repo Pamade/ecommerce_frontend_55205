@@ -5,10 +5,11 @@ import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import { FaRegUserCircle } from "react-icons/fa";
 import Navigation from "./Navigation/Navigation";
 import { useState, useEffect } from "react";
+import { useCartContext } from "../context/CartContext";
 
 const Header = () => {
-
     const [isNavigationOpen, setIsNavigationOpen] = useState(false)
+    const {state} = useCartContext();
 
     useEffect(() => {
 
@@ -37,7 +38,11 @@ const Header = () => {
                         {isNavigationOpen && <Navigation />}
                        <HiMiniMagnifyingGlass className={`${styles.magnifying_glass} ${styles.icon}`}/>
                        <input type="text" placeholder="Search for product..." className={styles.search_products_input} />
-                       <IoCartOutline className={styles.icon}/>
+                        <div className={styles.cart_container}>
+                            <div className={styles.ammount_products}>{state.cart.items.length}</div>
+                            <IoCartOutline className={`${styles.icon} ${styles.cart}`}/>
+                        </div>
+                       
                        <FaRegUserCircle className={styles.icon}/>
                     </div>
                 </div>

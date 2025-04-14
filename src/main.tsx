@@ -9,6 +9,8 @@ import Register from './Pages/Register/Register.tsx';
 import UserLoggedRoute from './ProtectionRoutes/UserLoggedRoute.tsx';
 import Shop from './Pages/Shop/Shop.tsx';
 import ProductPage from './Pages/ProductPage/ProductPage.tsx';
+import Cart from './Pages/Cart/Cart.tsx';
+import { CartProvider } from './context/CartContext.tsx';
 export const API_SERVER = import.meta.env.VITE_SERVER;
 export const token = localStorage.getItem("access_token");
 
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
       {
         path:"/product/:name",
         element:<ProductPage />
+      },
+      {
+        path:"/cart",
+        element:<Cart />
       }
     ]
      // i want to have header and side nav on every page
@@ -51,7 +57,9 @@ createRoot(document.getElementById('root')!).render(
     <>
     {/* <App> */}
     <UserProvider>
-      <RouterProvider router={router}/>
+      <CartProvider>
+        <RouterProvider router={router}/>
+      </CartProvider>
     </UserProvider>
 
     {/* </App> */}
