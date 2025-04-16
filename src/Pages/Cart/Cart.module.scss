@@ -92,6 +92,14 @@
         color: variables.$second;
         background-color: variables.$main;
     }
+    &_disabled{
+        border-color: variables.$third;
+        color: variables.$third;
+        &:hover{
+            background-color: transparent;
+            cursor:default;
+        }
+    }
 }
 
 @media (min-width:1200px) {

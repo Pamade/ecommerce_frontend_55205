@@ -14,15 +14,7 @@ const PaginationButtons = ({ totalItems, itemsPerPage, currentPage, setCurrentPa
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     return (
-      <div className={styles.wrapper}>
-        {/* {currentPage !== 1 && 
-        <button
-          onClick={() =>setCurrentPage(currentPage - 1)}
-        >
-          Prev
-        </button>} */}
-
-        
+      <div className={styles.wrapper}>        
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}

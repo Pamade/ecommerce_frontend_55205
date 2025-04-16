@@ -37,11 +37,13 @@ const cartReducer = (state:State, action:Action):State => {
 const CartContext = createContext<{
     state:State,
     addProduct: (product: ProductInterface, size: string, quantity: number) => Promise<void>,
-    removeProduct:(id:number) => Promise<void> 
+    removeProduct:(id:number) => Promise<void>,
+    changeQuantityProduct:(id:number, newQuantity:number) => Promise<void>,
 }>({
     state:initialState,
     addProduct:async () => {},
-    removeProduct:async () => {}
+    removeProduct:async () => {},
+    changeQuantityProduct:async () => {},
 })
 
 export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) => {
@@ -49,8 +51,13 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
     const {state:userContext} = useUserContext()
 
     const getCartCall = async() => {
-        const cartData = await getCartItems()
-        cartData && dispatch({type:"UPDATE_CART", payload:cartData})
+        try {
+            const cartData = await getCartItems()
+            cartData && dispatch({type:"UPDATE_CART", payload:cartData})
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     useEffect(() => {
@@ -88,18 +95,29 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
                             Authorization: "Bearer " + token
                         }
                     })
-                    try {
-                       getCartCall()
-                    } catch (e) {
-                        console.log(e)
-                    }
-                    
+                 
+                    getCartCall()
+                  
                     console.log(response)
                 } catch (e) {
                     console.log(e)
                 }
             } 
             
+    }
+
+    const changeQuantityProduct = async (id:number, newQuantity:number) => {
+        try {
+            const response = await axios.patch(`${API_SERVER}/cart/change-quantity/${id}/${newQuantity}`,null, {
+                headers:{
+                    Authorization: "Bearer " + token
+                }
+            })
+            getCartCall()
+            console.log(response)
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     const removeProduct = async (id:number) => {
@@ -109,15 +127,17 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
                     Authorization: "Bearer " + token
                 }
             })
-            // getCartCall()
+            getCartCall()
             console.log(response)
         } catch (e) {
             console.log(e)
         }
     }
 
+    
+
     return (
-        <CartContext.Provider value={{ state, addProduct, removeProduct}}>
+        <CartContext.Provider value={{ state, addProduct, removeProduct, changeQuantityProduct}}>
             {children}
         </CartContext.Provider>
     );

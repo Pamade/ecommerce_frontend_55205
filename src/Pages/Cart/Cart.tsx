@@ -5,12 +5,18 @@ const imgNotFound = "https://salonlfc.com/wp-content/uploads/2018/01/image-not-f
 
 const Cart = () => {
 
-    const {state, removeProduct} = useCartContext()
+    const {state, changeQuantityProduct, removeProduct} = useCartContext()
     const deliveryFee = 15;
     const cartPrice = state.cart.totalPrice
     const totalPrice = deliveryFee + cartPrice;
     
-    console.log(state)
+    const canIncrement = (maxQuantity:number, currentQuantity:number) => {
+        return currentQuantity <= maxQuantity; // allow reaching max
+    }
+
+    const canDecrement = (currentQuantity:number) => {
+        return currentQuantity > 1;
+    }
 
     return (
         <section className={styles.wrapper}>
@@ -19,28 +25,44 @@ const Cart = () => {
                 <div className={styles.products_wrapper}>
                     <div className={styles.products}>
                         {state.cart && state.cart.items.length > 0 ?
-                            state.cart.items.map((c) => (
-                                <div className={styles.single_product}>
-                                    <img className={styles.img} src={c.product.images[0] || imgNotFound} alt="product"/>
-                                    <div className={styles.about}>
-                                        <div className={styles.name_remove}>
-                                            <span className={styles.big}>{c.product.name}</span>
-                                            <span onClick={() => removeProduct(c.id)} className={styles.remove}>Remove</span>
-                                        </div>
-                                        
-                                        <p>Size: <span className={styles.small}>{c.size}</span></p>
-                                        <p>Color: <span className={styles.small}>{c.product.color}</span></p>
-                                        <div>
-                                            <div className={styles.quantities_wrapper}>
-                                                <button className={styles.btn}>-</button>
-                                                <div>{c.quantity}</div>
-                                                <button className={styles.btn}>+</button>
+                            state.cart.items.map((c) => 
+                                
+                                 (
+                                    <div className={styles.single_product}>
+                                        <img className={styles.img} src={c.product.images[0] || imgNotFound} alt="product"/>
+                                        <div className={styles.about}>
+                                            <div className={styles.name_remove}>
+                                                <span className={styles.big}>{c.product.name}</span>
+                                                <span onClick={() => removeProduct(c.id)} className={styles.remove}>Remove</span>
                                             </div>
+                                            
+                                            <p>Size: <span className={styles.small}>{c.size}</span></p>
+                                            <p>Color: <span className={styles.small}>{c.product.color}</span></p>
+                                            <div>
+                                                <div className={styles.quantities_wrapper}>
+                                                    <button disabled={!canDecrement(c.quantity)} onClick={() => {
+                                                        if (canDecrement(c.quantity)) {
+                                                            changeQuantityProduct(c.id, c.quantity - 1)
+                                                        }
+                                                    }} className={`${styles.btn} ${!canDecrement(c.quantity) && styles.btn_disabled}`}>-</button>
+                                                    <div>{c.quantity}</div>
+                                                    <button onClick={() => {
+                                                        
+                                                        if (canIncrement(c.product.sizeQuantities[c.size], c.quantity + 1)) {
+                                                            changeQuantityProduct(c.id, c.quantity + 1)
+                                                        }
+                                                    }
+                                                    
+                                                    } className={`${styles.btn} ${!canIncrement(c.product.sizeQuantities[c.size], c.quantity + 1) && styles.btn_disabled}`}>+</button>
+                                                </div>
+                                            </div>
+                                            <p><span className={styles.big}>{c.product.price}$</span></p>
                                         </div>
-                                        <p><span className={styles.big}>{c.product.price}$</span></p>
                                     </div>
-                                </div>
-                            ))
+                                )
+                            
+                                
+                               )
                             :null
                         }
                     </div>
