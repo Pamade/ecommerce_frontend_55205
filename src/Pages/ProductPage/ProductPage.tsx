@@ -14,11 +14,12 @@ const ProductPage = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [product, setProduct] = useState<ProductInterface>()
     const [indexOfMainPhoto, setIndexOfMainPhoto] = useState(0)
-    const [selectedSize, setSelectedSize] = useState("M")
+    const [sizeSelectedAndQuantity, setSelectedAndQuantity] = useState<{[index:string]:number}>({"M":1}) 
     const [moreAboutType, setMoreAboutType] = useState<MoreContentType>("details")
-    const [selectedQuantity, setSelectedQuantity] = useState(1)
+    // const [selectedQuantity, setSelectedQuantity] = useState(1)
     const [notFound, setNotFound] = useState("")
-    const {addProduct} = useCartContext()
+    const {addProduct, findProductInCart} = useCartContext()
+    
     const {name} = useParams()
 
     useEffect(() => {
@@ -52,11 +53,31 @@ const ProductPage = () => {
         setMoreAboutType(id)
     }
 
+    const handleSelectSelectedSizeAndQuantity = (item:[string, number]) => {
+        const size = item[0]
+        const quantity = 1
+        setSelectedAndQuantity({[size]:quantity})
+    }
+
+    const getSelectedAndQuantityKey = Object.keys(sizeSelectedAndQuantity)[0]
+        
+    const getQuantity = Object.values(sizeSelectedAndQuantity)[0]
+
+    const sameProdductInCart = product && findProductInCart(product.id, getSelectedAndQuantityKey)
+    
+    const handleAddQuantity = () => {
+        setSelectedAndQuantity({[getSelectedAndQuantityKey]:sizeSelectedAndQuantity[getSelectedAndQuantityKey] += 1})
+    }
+
+    const handleSubtractQuantity = () => {
+        setSelectedAndQuantity({[getSelectedAndQuantityKey]:sizeSelectedAndQuantity[getSelectedAndQuantityKey] -= 1})
+    }
+
 
     return (
         <section className={styles.wrapper}>
             {isLoading && <p>Loading...</p>}
-            {!product && !isLoading &&  <h4>Product Not Found</h4>}
+            {!product && !isLoading && notFound && <h4>Product Not Found</h4>}
             {product &&
             <>
             <div className={styles.content}>
@@ -77,25 +98,23 @@ const ProductPage = () => {
                     
                     <p className={styles.description}>Choose Size</p>
                     <div className={styles.sizes_wrapper}>
-                    {product.sizeQuantities && Object.entries(product.sizeQuantities).map((item) => <div onClick={() => {
-                        setSelectedSize(item[0])
-                        setSelectedQuantity(1)
-                    }} className={`${styles.sizes_single} ${selectedSize === item[0] && styles.selected_size}`}>
+                    {product.sizeQuantities && Object.entries(product.sizeQuantities).map((item) => item[1] > 0 && <div onClick={() => {
+                        handleSelectSelectedSizeAndQuantity(item)
+                    }} className={`${styles.sizes_single} ${Object.keys(sizeSelectedAndQuantity)[0] === item[0] && `${styles.selected_size}`} `}>
                         {item[1] > 0 && <span className={styles.size}>{item[0]}</span>}
-                        {/* <span className={styles.quantities}>{item[1]}</span> */}
                         </div>)
                     }
                     </div>
                     <div className={styles.quantities_and_add}>
                         <div className={styles.select_quantities_wrapper}>
-                            <button onClick={() => setSelectedQuantity(prev => prev-=1)} disabled={selectedQuantity === 1} className={styles.select_box}>-</button>
-                            <div className={styles.quantities_count}>{selectedQuantity}</div>
-                            <button onClick={() =>product.sizeQuantities[selectedSize] > selectedQuantity && setSelectedQuantity(prev => prev+=1)} className={styles.select_box}>+</button>
+                            <button onClick={() => handleSubtractQuantity()} disabled={getQuantity === 1} className={styles.select_box}>-</button>
+                            <div className={styles.quantities_count}>{getQuantity}</div>
+                            <button onClick={() => handleAddQuantity()} className={styles.select_box}>+</button>
                         </div>
-                        <button onClick={() => addProduct(product, selectedSize, selectedQuantity)} className={styles.add_to_cart_btn}>ADD TO CART</button>
+                        <button onClick={() => addProduct(product, getSelectedAndQuantityKey, getQuantity)} className={styles.add_to_cart_btn}>ADD TO CART</button>
                     </div>
                     <div>
-                        <span className={styles.in_stock}>In stock: {product?.sizeQuantities[selectedSize]}</span>
+                        <span className={styles.in_stock}>In stock: {product.sizeQuantities[getSelectedAndQuantityKey] - getQuantity - (sameProdductInCart?.quantity || 0)}</span>
                     </div>
                 </div>
             </div>

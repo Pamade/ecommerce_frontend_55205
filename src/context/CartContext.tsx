@@ -39,11 +39,13 @@ const CartContext = createContext<{
     addProduct: (product: ProductInterface, size: string, quantity: number) => Promise<void>,
     removeProduct:(id:number) => Promise<void>,
     changeQuantityProduct:(id:number, newQuantity:number) => Promise<void>,
+    findProductInCart:(productId:number, size:string) => CartProduct | undefined
 }>({
     state:initialState,
     addProduct:async () => {},
     removeProduct:async () => {},
     changeQuantityProduct:async () => {},
+    findProductInCart:() => undefined
 })
 
 export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) => {
@@ -79,9 +81,27 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
         }
     }
 
+    const findProductInCart = (productId:number, size:string) => state.cart.items.find((item) => item.product.id === productId && item.size === size)
+    //TODO: ZABLOKOWAĆ MOZLIWOSC DODANIA PRODUKTU, JEZELI QUANTITY PRODUKTU W CART + quantity
+    // Jest wieksza niz productQuantity
     const addProduct = async (product:ProductInterface, size:string, quantity:number) => {
             const user = userContext.user
-
+            const cartItem = findProductInCart(product.id, size)
+            
+            let isAllowedToAdd = true;
+            if (cartItem) {
+                isAllowedToAdd = cartItem.quantity + quantity < cartItem.product.sizeQuantities[cartItem.size]
+            }
+            console.log(isAllowedToAdd)
+            
+            // console.log(cartItem)
+            // cartItems.forEach((item, i) => {
+                
+            //     console.log(isAllowedToAdd)
+            //     // console.log(itemSize)
+            //     console.log(item.product.id === product.id)
+            //     // if (item.product.name === product.name)
+            // })
             if (user && product) {
                 const cartItem = {
                     productId:product.id,
@@ -120,6 +140,7 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
         }
     }
 
+
     const removeProduct = async (id:number) => {
         try {
             const response = await axios.patch(`${API_SERVER}/cart/remove/${id}`,null, {
@@ -134,10 +155,9 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
         }
     }
 
-    
 
     return (
-        <CartContext.Provider value={{ state, addProduct, removeProduct, changeQuantityProduct}}>
+        <CartContext.Provider value={{ state, addProduct, removeProduct, changeQuantityProduct, findProductInCart}}>
             {children}
         </CartContext.Provider>
     );
@@ -147,31 +167,3 @@ export const useCartContext = () => {
     const context = useContext(CartContext)
     return context;
 }
-// const useFetchProductFromCart = (autoStart:boolean) => {
-
-//     const [products, setProducts] = useState<CartProduct[]>([])
-
-//     const getFromCart = async () => {
-        // try {
-        //     const response = await axios.get(`${API_SERVER}/cart/get-all`, {
-        //         headers: {
-        //             Authorization: "Bearer " + token,
-        //         }
-        //     })
-        //     const data:CartProduct[] = response.data
-        //     setProducts(data)
-        //     console.log(data)
-        // } catch (e) {
-        //     console.log(e)
-        // }
-//     }
-
-//     useEffect(() => {
-
-        
-//         getFromCart()
-
-//     }, []);
-
-//     return {products, getFromCart}
-// }

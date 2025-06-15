@@ -1,5 +1,6 @@
 import styles from "./Cart.module.scss"
 import { useCartContext } from "../../context/CartContext";
+import CheckoutButton from "./CheckoutButton/CheckoutButton"
 
 const imgNotFound = "https://salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png"
 
@@ -7,9 +8,9 @@ const Cart = () => {
 
     const {state, changeQuantityProduct, removeProduct} = useCartContext()
     const deliveryFee = 15;
-    const cartPrice = state.cart.totalPrice
-    const totalPrice = deliveryFee + cartPrice;
-    
+    const cartPrice = Number(state.cart.totalPrice.toFixed(2))
+    const totalPrice = deliveryFee + cartPrice
+    const isNotEmpty = state.cart.items.length > 0
     const canIncrement = (maxQuantity:number, currentQuantity:number) => {
         return currentQuantity <= maxQuantity; // allow reaching max
     }
@@ -17,6 +18,7 @@ const Cart = () => {
     const canDecrement = (currentQuantity:number) => {
         return currentQuantity > 1;
     }
+    
 
     return (
         <section className={styles.wrapper}>
@@ -24,7 +26,7 @@ const Cart = () => {
             <div className={styles.summary_and_cart}>
                 <div className={styles.products_wrapper}>
                     <div className={styles.products}>
-                        {state.cart && state.cart.items.length > 0 ?
+                        {state.cart && isNotEmpty ?
                             state.cart.items.map((c) => 
                                 
                                  (
@@ -63,11 +65,12 @@ const Cart = () => {
                             
                                 
                                )
-                            :null
+                            : <h4>Cart is empty</h4> 
                         }
                     </div>
                 </div>
-                <div className={styles.products_wrapper}>
+                
+                {isNotEmpty &&<div className={styles.products_wrapper}>
                     <h4>Order Summary</h4>
                     <div className={styles.summary_about}>
                         <div className={styles.description}>
@@ -83,8 +86,11 @@ const Cart = () => {
                             <span className={styles.big}>{totalPrice}$</span>
                         </div>
                     </div>
+                    <CheckoutButton />
                 </div>
+                }
             </div>
+            
         </section>
         
     )

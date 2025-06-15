@@ -11,13 +11,21 @@ import Shop from './Pages/Shop/Shop.tsx';
 import ProductPage from './Pages/ProductPage/ProductPage.tsx';
 import Cart from './Pages/Cart/Cart.tsx';
 import { CartProvider } from './context/CartContext.tsx';
+import ScrollToTop from './Components/ScrollToTop/ScrollToTop.tsx';
+import SuccessPayment from './Pages/SuccessPayment/SuccessPayment.tsx';
+
 export const API_SERVER = import.meta.env.VITE_SERVER;
 export const token = localStorage.getItem("access_token");
 
 const router = createBrowserRouter([
   {
     path:"/",
-    element:<MainLayout />,
+    element: (
+      <>
+        <ScrollToTop />
+        <MainLayout />
+      </>
+    ),
     children:[
       {
         path:"/",
@@ -34,6 +42,10 @@ const router = createBrowserRouter([
       {
         path:"/cart",
         element:<Cart />
+      },
+      {
+        path:"/success",
+        element:<SuccessPayment/>
       }
     ]
      // i want to have header and side nav on every page

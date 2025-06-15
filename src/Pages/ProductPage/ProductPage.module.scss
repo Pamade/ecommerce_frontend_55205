@@ -119,6 +119,11 @@
     color: variables.$second;
     padding: 1rem 2rem;
     border-radius: 62px;
+    cursor: pointer;
+    &:hover{
+        color: variables.$main;
+        background-color: variables.$second;
+    }
 }
 
 .reviews_content{

@@ -13,9 +13,12 @@ interface Props{
 const DisplayClothes = ({heading}:Props) => {
     let {products} = useFetchAllProducts();
     const [isShowMoreOpen, setIsShowMoreOpen] = useState(false)
-
     const numberOfResults = isShowMoreOpen ? 8 : 4 as const;
-    const getFourLatestProducts = products?.slice(0, numberOfResults).map((product) => <Product {...product}/>)
+    const getFourLatestProducts = products?.slice(0, numberOfResults).map((product) => (
+        
+            <Product key={product.id} {...product}/>
+        
+    ))
     const buttonText = isShowMoreOpen ? "SHOW LESS" : "SHOW MORE";
 
     return (

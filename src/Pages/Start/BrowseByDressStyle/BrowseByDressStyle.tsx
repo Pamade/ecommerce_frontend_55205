@@ -15,7 +15,7 @@ const BrowseByDressStyle = () => {
             <Heading text="BROWSE BY DRESS STYLE"/>
             <div className={styles.persons_wrapper}>
                 {persons.map((person) => (
-                    <Link to="xd" className={styles.person_single}>
+                    <Link to={`shop?style=${person.text.toLowerCase()}`} className={styles.person_single}>
                         <div className={styles.background_person} style={{backgroundImage:`url(${person.img})`}}>
                             <h6 className={styles.type}>{person.text}</h6>
                         </div>
