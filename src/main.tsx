@@ -15,7 +15,7 @@ import ScrollToTop from './Components/ScrollToTop/ScrollToTop.tsx';
 import SuccessPayment from './Pages/SuccessPayment/SuccessPayment.tsx';
 
 export const API_SERVER = import.meta.env.VITE_SERVER;
-export const token = localStorage.getItem("access_token");
+// export const token = localStorage.getItem("access_token");
 
 const router = createBrowserRouter([
   {

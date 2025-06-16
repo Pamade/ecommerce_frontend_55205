@@ -1,7 +1,7 @@
 import { loadStripe } from "@stripe/stripe-js";
 import styles from "../Cart.module.scss";
 import axios from "axios";
-import { API_SERVER, token } from "../../../main";
+import { API_SERVER } from "../../../main";
 
 const stripePromise = loadStripe("pk_test_51RGdrhQAyzvYrAEbwKTh1eXm0zb6ilp09MMzuK37Q2IqRC5n3JTINfgRzAR9Nxq3zTI1hjEUfPcoRNOtomcNGnxu00EITOCXLR")
 
@@ -13,7 +13,7 @@ const CheckoutButton = () => {
         try {
             const response = await axios.post(`${API_SERVER}/stripe/create-checkout-session`, null, {
                 headers:{
-                    Authorization:"Bearer " + token
+                    Authorization:"Bearer " + localStorage.getItem("access_token"),
                 }
             })
             const stripe = await stripePromise;

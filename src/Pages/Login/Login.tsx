@@ -1,8 +1,9 @@
 import React, { useState, FormEvent } from 'react';
 import styles from './Login.module.scss';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import axios from 'axios';
 import { API_SERVER } from '../../main';
+import { useUserContext } from '../../context/UserContext';
 // Define the login credentials interface
 interface LoginCredentials {
   email: string;
@@ -10,45 +11,48 @@ interface LoginCredentials {
 }
 
 const Login: React.FC = () => {
-  // Initialize form state with empty values
+  
+  const navigate = useNavigate();
+  
+
   const [formData, setFormData] = useState<LoginCredentials>({
     email: '',
     password: '',
   });
 
-  // Error states
+  
   const [errors, setErrors] = useState<Partial<LoginCredentials>>({});
   const [loginError, setLoginError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-  // Handle input changes
+  const {fetchUserData} = useUserContext();
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     
-    // Clear error when user starts typing in a field
+    
     if (errors[name as keyof LoginCredentials]) {
       setErrors({ ...errors, [name]: '' });
     }
 
-    // Clear general login error when user modifies any field
+    
     if (loginError) {
       setLoginError('');
     }
   };
 
-  // Validate the form
+  
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginCredentials> = {};
     
-    // Validate email
+    
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
 
-    // Validate password
+    
     if (!formData.password.trim()) {
       newErrors.password = 'Password is required';
     }
@@ -56,8 +60,7 @@ const Login: React.FC = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  // Handle form submission
+  
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
@@ -71,6 +74,10 @@ const Login: React.FC = () => {
         const token = response.data.access_token
         token && localStorage.setItem("access_token", token)
         console.log('Login attempt with credentials:', formData);
+        fetchUserData(token)
+        setTimeout(() => {
+          navigate("/")
+        }, 1000)
         
         
       } catch (error : any) {
@@ -163,9 +170,9 @@ const Login: React.FC = () => {
                   type="checkbox"
                   className={styles.checkboxInput}
                 />
-                <label htmlFor="remember-me" className={styles.checkboxLabel}>
+                {/* <label htmlFor="remember-me" className={styles.checkboxLabel}>
                   Remember me
-                </label>
+                </label> */}
               </div>
             </div>
 

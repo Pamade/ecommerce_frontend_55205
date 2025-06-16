@@ -14,16 +14,14 @@ const ProductPage = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [product, setProduct] = useState<ProductInterface>()
     const [indexOfMainPhoto, setIndexOfMainPhoto] = useState(0)
-    const [sizeSelectedAndQuantity, setSelectedAndQuantity] = useState<{[index:string]:number}>({"M":1}) 
+    const [sizeSelectedAndQuantity, setSelectedAndQuantity] = useState<{[index:string]:number}>({"S":1}) 
     const [moreAboutType, setMoreAboutType] = useState<MoreContentType>("details")
-    // const [selectedQuantity, setSelectedQuantity] = useState(1)
     const [notFound, setNotFound] = useState("")
     const {addProduct, findProductInCart} = useCartContext()
     
     const {name} = useParams()
 
     useEffect(() => {
-
         const fetchProduct = async ()=> {
             setIsLoading(true)
             try {
@@ -41,12 +39,9 @@ const ProductPage = () => {
             finally{
                 setIsLoading(false)
             }
-
         }
         fetchProduct()
-        
     }, [])
-
 
     const handleSetMoreAbout = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const id = e.currentTarget.id as MoreContentType;
@@ -60,19 +55,35 @@ const ProductPage = () => {
     }
 
     const getSelectedAndQuantityKey = Object.keys(sizeSelectedAndQuantity)[0]
-        
     const getQuantity = Object.values(sizeSelectedAndQuantity)[0]
 
+    // Get the product that's already in cart for this size
     const sameProdductInCart = product && findProductInCart(product.id, getSelectedAndQuantityKey)
     
+    // Calculate available stock (total stock - already in cart)
+    const availableStock = product ? (product.sizeQuantities[getSelectedAndQuantityKey] - (sameProdductInCart?.quantity || 0)) : 0
+    
+    // Calculate remaining stock after current selection
+    const remainingStock = availableStock - getQuantity
+
     const handleAddQuantity = () => {
-        setSelectedAndQuantity({[getSelectedAndQuantityKey]:sizeSelectedAndQuantity[getSelectedAndQuantityKey] += 1})
+        // Only allow increment if we won't exceed available stock
+        if (getQuantity < availableStock) {
+            setSelectedAndQuantity({[getSelectedAndQuantityKey]: getQuantity + 1})
+        }
     }
 
     const handleSubtractQuantity = () => {
-        setSelectedAndQuantity({[getSelectedAndQuantityKey]:sizeSelectedAndQuantity[getSelectedAndQuantityKey] -= 1})
+        if (getQuantity > 1) {
+            setSelectedAndQuantity({[getSelectedAndQuantityKey]: getQuantity - 1})
+        }
     }
 
+    const handleAddToCart = () => {
+        if (product && getQuantity <= availableStock && availableStock > 0) {
+            addProduct(product, getSelectedAndQuantityKey, getQuantity)
+        }
+    }
 
     return (
         <section className={styles.wrapper}>
@@ -85,7 +96,15 @@ const ProductPage = () => {
                     <div className={styles.images_wrapper}>
                         <img className={styles.main_image} src={product.images[indexOfMainPhoto]} alt="main" />
                         <div className={styles.images}>
-                            {product.images.map((image, i) => <div onClick={() => setIndexOfMainPhoto(i)} className={`${styles.product_single} ${i === indexOfMainPhoto && styles.selected}`}><img className={styles.image_collection} src={image}/></div>)}
+                            {product.images.map((image, i) => 
+                                <div 
+                                    key={i}
+                                    onClick={() => setIndexOfMainPhoto(i)} 
+                                    className={`${styles.product_single} ${i === indexOfMainPhoto && styles.selected}`}
+                                >
+                                    <img className={styles.image_collection} src={image} alt={`Product ${i}`}/>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -98,34 +117,74 @@ const ProductPage = () => {
                     
                     <p className={styles.description}>Choose Size</p>
                     <div className={styles.sizes_wrapper}>
-                    {product.sizeQuantities && Object.entries(product.sizeQuantities).map((item) => item[1] > 0 && <div onClick={() => {
-                        handleSelectSelectedSizeAndQuantity(item)
-                    }} className={`${styles.sizes_single} ${Object.keys(sizeSelectedAndQuantity)[0] === item[0] && `${styles.selected_size}`} `}>
-                        {item[1] > 0 && <span className={styles.size}>{item[0]}</span>}
-                        </div>)
-                    }
+                        {product.sizeQuantities && Object.entries(product.sizeQuantities).map((item, index) => 
+                            item[1] > 0 && (
+                                <div 
+                                    key={index}
+                                    onClick={() => handleSelectSelectedSizeAndQuantity(item)} 
+                                    className={`${styles.sizes_single} ${Object.keys(sizeSelectedAndQuantity)[0] === item[0] && styles.selected_size}`}
+                                >
+                                    <span className={styles.size}>{item[0]}</span>
+                                </div>
+                            )
+                        )}
                     </div>
                     <div className={styles.quantities_and_add}>
                         <div className={styles.select_quantities_wrapper}>
-                            <button onClick={() => handleSubtractQuantity()} disabled={getQuantity === 1} className={styles.select_box}>-</button>
+                            <button 
+                                onClick={handleSubtractQuantity} 
+                                disabled={getQuantity === 1} 
+                                className={styles.select_box}
+                            >
+                                -
+                            </button>
                             <div className={styles.quantities_count}>{getQuantity}</div>
-                            <button onClick={() => handleAddQuantity()} className={styles.select_box}>+</button>
+                            <button 
+                                onClick={handleAddQuantity} 
+                                disabled={getQuantity >= availableStock || availableStock <= 0}
+                                className={styles.select_box}
+                            >
+                                +
+                            </button>
                         </div>
-                        <button onClick={() => addProduct(product, getSelectedAndQuantityKey, getQuantity)} className={styles.add_to_cart_btn}>ADD TO CART</button>
+                        <button 
+                            onClick={handleAddToCart} 
+                            disabled={getQuantity > availableStock || availableStock <= 0}
+                            className={styles.add_to_cart_btn}
+                        >
+                            ADD TO CART
+                        </button>
                     </div>
                     <div>
-                        <span className={styles.in_stock}>In stock: {product.sizeQuantities[getSelectedAndQuantityKey] - getQuantity - (sameProdductInCart?.quantity || 0)}</span>
+                        <span className={styles.in_stock}>
+                            {availableStock <= 0 ? 
+                                "Out of stock" : 
+                                `In stock: ${remainingStock >= 0 ? remainingStock : 0}`
+                            }
+                        </span>
                     </div>
                 </div>
             </div>
             <div className={styles.more_about_product}>
-                <div id="details" onClick={(e) => handleSetMoreAbout(e)} className={`${styles.more_about_single} ${moreAboutType === "details" && styles.more_about_single_selected}`}>
+                <div 
+                    id="details" 
+                    onClick={handleSetMoreAbout} 
+                    className={`${styles.more_about_single} ${moreAboutType === "details" && styles.more_about_single_selected}`}
+                >
                     <span className={styles.more_about_text}>Product details</span>
                 </div>
-                <div id="reviews" onClick={(e) => handleSetMoreAbout(e)} className={`${styles.more_about_single} ${moreAboutType === "reviews" && styles.more_about_single_selected}`}>
+                <div 
+                    id="reviews" 
+                    onClick={handleSetMoreAbout} 
+                    className={`${styles.more_about_single} ${moreAboutType === "reviews" && styles.more_about_single_selected}`}
+                >
                     <span className={styles.more_about_text}>Reviews</span>
                 </div>
-                <div id="faq" onClick={(e) => handleSetMoreAbout(e)} className={`${styles.more_about_single} ${moreAboutType === "faq" && styles.more_about_single_selected}`}>
+                <div 
+                    id="faq" 
+                    onClick={handleSetMoreAbout} 
+                    className={`${styles.more_about_single} ${moreAboutType === "faq" && styles.more_about_single_selected}`}
+                >
                     <span className={styles.more_about_text}>Faq</span>
                 </div>
             </div>
@@ -133,9 +192,7 @@ const ProductPage = () => {
             </>
             }
         </section>
-        
     )
-
 }
 
 interface Props {
@@ -144,21 +201,20 @@ interface Props {
 }
 
 const MoreContent = ({type, product}:Props) => {
-
     switch(type){
         case "details":
-            return <div>
-                <p>{product.details}</p>
-            </div>
-        case "reviews":
-            
             return (
-                
+                <div>
+                    <p>{product.details}</p>
+                </div>
+            )
+        case "reviews":
+            return (
                 <div className={styles.reviews_wrapper}>
                     {product.productReviews.length === 0 ? <h4>No reviews</h4> :
                         <div className={styles.reviews_content}>
-                            {product.productReviews.map((r) =>
-                                <div className={styles.single_review}>
+                            {product.productReviews.map((r, index) =>
+                                <div key={index} className={styles.single_review}>
                                     <div><span>{r.user.firstName} {r.user.lastName}</span></div>
                                     <div><StarRating productRating={r.rating}/></div>
                                     <div>
@@ -168,7 +224,6 @@ const MoreContent = ({type, product}:Props) => {
                             )}
                         </div>
                     }
-                    
                 </div>
             )
         case "faq":

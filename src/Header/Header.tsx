@@ -6,11 +6,27 @@ import { FaRegUserCircle } from "react-icons/fa";
 import Navigation from "./Navigation/Navigation";
 import { useState, useEffect } from "react";
 import { useCartContext } from "../context/CartContext";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useUserContext } from "../context/UserContext";
 
 const Header = () => {
     const [isNavigationOpen, setIsNavigationOpen] = useState(false)
     const {state} = useCartContext();
+    const {state:user_state, logout} = useUserContext()
+    const navigate = useNavigate()
+    const [displayQuantity, setDisplayQuantity] = useState(false)
+    const logout_user = () => {
+        logout()
+        
+        navigate("/")
+    }
+
+
+    useEffect(() => {
+        if (user_state.user !== null) {
+            setDisplayQuantity(true)
+        } else setDisplayQuantity(false)
+    }, [user_state])
 
     useEffect(() => {
         const handleResize = () => {
@@ -45,11 +61,20 @@ const Header = () => {
                        <HiMiniMagnifyingGlass className={`${styles.magnifying_glass} ${styles.icon}`}/>
                        <input type="text" placeholder="Search for product..." className={styles.search_products_input} />
                         <Link to="/cart" className={styles.cart_container}>
-                            <div className={styles.ammount_products}>{state.cart.items.length}</div>
+                            {displayQuantity ? <div className={styles.ammount_products}>{state.cart.items.length}</div> : null}
                             <IoCartOutline className={`${styles.icon} ${styles.cart}`}/>
                         </Link>
-                       
-                       <FaRegUserCircle className={styles.icon}/>
+                        
+                        
+                        { user_state.user !== null ? 
+                         <p onClick={logout_user}>Logout</p>
+                        :
+                        <div className={styles.links}>
+                            <Link to="/register">Register</Link>
+                            <Link to="/login">Login</Link>
+                        </div>
+                        }   
+                       {/* <FaRegUserCircle className={styles.icon}/> */}
                     </div>
                 </div>
             </section>

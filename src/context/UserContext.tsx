@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import axios from "axios";
-import { API_SERVER, token } from "../main";
+import { API_SERVER } from "../main";
 import {User} from "../types/types";
 import { ContextState } from "../types/types";
+import { useNavigate } from "react-router";
 
 
 interface State extends ContextState{
@@ -52,13 +53,12 @@ const UserContext = createContext<{
 // Context Provider Component
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(userReducer, initialState);
-
+    // const navigate = useNavigate()
     const logout = () => {
         localStorage.removeItem('access_token');
         dispatch({type:"LOGOUT"})
+        // navigate("/")
     }
-
-
 
     const fetchUserData = async (token: string) => {
         dispatch({ type: "START_FETCH_USER_DATA" });
@@ -66,7 +66,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const res = await axios.get(`${API_SERVER}/auth/me`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
                     "Content-Type": "application/json",
                 },
             });
@@ -86,7 +86,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     useEffect(() => {
         const w = async() => {
-            await fetchUserData(token!)
+            await fetchUserData(localStorage.getItem("access_token")!)
         }
         w()
     }, [])

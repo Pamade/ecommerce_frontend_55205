@@ -13,7 +13,7 @@ const OutHappyCustomers = () => {
 
     return (
         <section className={styles.wrapper}>    
-            <Heading text="OUR HAPPY CUSTOMERS"/>
+            {/* <Heading text="OUR HAPPY CUSTOMERS"/> */}
             <div className={styles.reviews_wrapper}>
                 {oneReviewForOneProductMaxFour.slice(0,4).map((r) => 
                     <div className={styles.product_single}>     

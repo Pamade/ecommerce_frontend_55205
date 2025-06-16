@@ -8,28 +8,29 @@ import logo5 from "../../assets/partners/logo5.png"
 import DisplayClothes from "./DisplayClothes/DisplayClothes"
 import BrowseByDressStyle from "./BrowseByDressStyle/BrowseByDressStyle"
 import axios from "axios"
-import { token, API_SERVER } from "../../main"
+import {  API_SERVER } from "../../main"
 import OutHappyCustomers from "./OurHappyCustomers/OurHappyCustomers"
+import { Link } from "react-router"
 
 const Start = () => {
     const partners = [logo1, logo2, logo3, logo4, logo5]
     const about = [{title:"200+", label:"International Brands"}, {title:"2,000+", label:"High Quality Products"}, {title:"30,000+", label:"Happy customers"}]
                 const fetch = async () => {
                     const r = await axios.post(`${API_SERVER}/reviews/add`, {productId:64, email:"insune15@gmail.com", reviewText:"XD", rating:5}, {
-                        headers:{"Authorization": "Bearer " + token}
+                        headers:{"Authorization": "Bearer " + localStorage.getItem("access_token")}
                     })
                     console.log(r)
                 }
                 // fetch()
     return (
     <>
-        <button onClick={() => fetch()}>ADD review</button>
+        {/* <button onClick={() => fetch()}>ADD review</button> */}
         <section className={styles.main_background}>
             <div className={styles.wrapper}>
                 <div className={styles.info}>
                     <h2 className={styles.heading}>FIND CLOTHES THAT MATCH YOUR STYLE</h2>
                     <p className={styles.description}>Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.</p>
-                    <button className={styles.button}>Shop now</button>
+                    <Link className={styles.button} to="/shop">SHOP NOW</Link>
                     <div className={styles.about}>
                         {about.map((item) => (
                             <div className={styles.single_about}>

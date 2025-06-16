@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 import { CartProduct, ProductInterface, User } from "../types/types"
 import { ContextState } from "../types/types"
 import axios from "axios";
-import { token, API_SERVER } from "../main";
+import { API_SERVER } from "../main";
 import { useUserContext } from "./UserContext";
 
 interface State extends ContextState{
@@ -70,7 +70,7 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
         try {
             const response = await axios.get(`${API_SERVER}/cart/get-all`, {
                 headers: {
-                    Authorization: "Bearer " + token,
+                    Authorization: "Bearer " + localStorage.getItem("access_token"),
                 }
             })
             const data:CartProduct[] = response.data
@@ -94,14 +94,7 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
             }
             console.log(isAllowedToAdd)
             
-            // console.log(cartItem)
-            // cartItems.forEach((item, i) => {
-                
-            //     console.log(isAllowedToAdd)
-            //     // console.log(itemSize)
-            //     console.log(item.product.id === product.id)
-            //     // if (item.product.name === product.name)
-            // })
+
             if (user && product) {
                 const cartItem = {
                     productId:product.id,
@@ -112,7 +105,7 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
                 try {
                     const response = await axios.post(`${API_SERVER}/cart/add`, cartItem, {
                         headers:{
-                            Authorization: "Bearer " + token
+                            Authorization: "Bearer " + localStorage.getItem("access_token")
                         }
                     })
                  
@@ -130,7 +123,7 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
         try {
             const response = await axios.patch(`${API_SERVER}/cart/change-quantity/${id}/${newQuantity}`,null, {
                 headers:{
-                    Authorization: "Bearer " + token
+                    Authorization: "Bearer " + localStorage.getItem("access_token")
                 }
             })
             getCartCall()
@@ -143,13 +136,13 @@ export const CartProvider:React.FC<{children:React.ReactNode}> = ({children}) =>
 
     const removeProduct = async (id:number) => {
         try {
-            const response = await axios.patch(`${API_SERVER}/cart/remove/${id}`,null, {
+            const response = await axios.delete(`${API_SERVER}/cart/remove/${id}`, {
                 headers:{
-                    Authorization: "Bearer " + token
+                    Authorization: "Bearer " + localStorage.getItem("access_token"),
                 }
             })
             getCartCall()
-            console.log(response)
+            console.log(localStorage.getItem("access_token"))
         } catch (e) {
             console.log(e)
         }
